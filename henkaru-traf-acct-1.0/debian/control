@@ -1,0 +1,14 @@
+Source: henkaru-traf-acct
+Section: misc
+Priority: optional
+Maintainer: Alexey Alexashin <alexashin.a.n@yandex.ru>
+Build-Depends: debhelper (>= 7)
+Standards-Version: 3.8.3
+Homepage: https://github.com/henkaru/henkaru-traf-acct.git
+
+Package: henkaru-traf-acct
+Architecture: all
+Depends: ${misc:Depends}, softflowd, flow-tools, python, mysql-server, python-mysqldb
+Suggests: mutt, postfix, dokuwiki
+Description: Traffic accounting meta package
+ Deploy accounting system

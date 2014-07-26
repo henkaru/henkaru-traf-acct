@@ -1,0 +1,3 @@
+scripts/* /opt/flow/bin/
+sql/* /opt/flow/bin/
+upstart/* /etc/init/
