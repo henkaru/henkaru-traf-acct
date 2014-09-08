@@ -15,7 +15,7 @@ __license__ = "Python"
 
 
 import sys
-import pdb
+#import pdb
 
 def flow2csv(flowname=sys.argv[1],file2db='/opt/flow/traf.csv'):
     '''Create csv with src, dst, doctets columns from netflow flie'''

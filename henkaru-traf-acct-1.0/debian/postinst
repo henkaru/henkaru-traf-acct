@@ -31,6 +31,7 @@ case "$1" in
         for x in "$START_LIST"; do
             start_init "$x" || true
         done
+        pip install flask || true
     ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)

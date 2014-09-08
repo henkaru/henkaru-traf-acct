@@ -8,7 +8,7 @@ Homepage: https://github.com/henkaru/henkaru-traf-acct.git
 
 Package: henkaru-traf-acct
 Architecture: all
-Depends: ${misc:Depends}, softflowd, flow-tools, python, mysql-server, python-mysqldb
+Depends: ${misc:Depends}, fprobe, flow-tools, python-pip, mysql-server, python-mysqldb
 Suggests: mutt, postfix, dokuwiki
 Description: Traffic accounting meta package
  Deploy accounting system
