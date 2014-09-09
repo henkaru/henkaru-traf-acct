@@ -11,4 +11,4 @@ Architecture: all
 Depends: ${misc:Depends}, fprobe, flow-tools, python-pip, mysql-server, python-mysqldb
 Suggests: mutt, postfix, dokuwiki
 Description: Traffic accounting meta package
- Deploy accounting system
+ Deploy accounting system based on netflow

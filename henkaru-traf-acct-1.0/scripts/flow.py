@@ -18,7 +18,23 @@ import sys, subprocess
 def getusers():
     '''Get user and their IP addresses from mysql database.
     Returns dict{ip:user}'''
-    pass
+    
+    import  MySQLdb
+    dbhost='localhost'
+    dbname='traf'
+    dbuser='traf'
+    dbpassword=''
+    sql = 'select ip, user from `user`'
+    try:
+        con = MySQLdb.connect(host=dbhost, user=dbuser, db=dbname, passwd=dbpassword)
+        cur = con.cursor()
+        cur.execute(sql)
+        out = cur.fetchall()
+    except MySQLdb.Error:
+        print(con.error())
+    finally:
+        con.close()
+    return dict(out)
 
 def getclientbyip(ip):
     '''Get PTR record without domain from local DNS server'''
@@ -40,6 +56,7 @@ def getmonthreport(month,year,mode,netprefix,path="/opt/flow"):
     # Save output of `flow-cat ... | flow-stat -fX` to the list
     cmd1 = subprocess.Popen(["flow-cat", '{0}/{1}/{1}-{2:02d}/'.format(path, year, month)],stdout=subprocess.PIPE)
     cmd2 = subprocess.Popen(["flow-stat", direction[mode]],stdin=cmd1.stdout,stdout=subprocess.PIPE)
+    users = getusers()
     out = []
     for line in cmd2.communicate()[0].split('\n'):
         # Clean output from comments and empty strings
@@ -53,7 +70,7 @@ def getmonthreport(month,year,mode,netprefix,path="/opt/flow"):
                 else:
                     (ip,flows,doctets,pkts) = line.split()
                     if ip.startswith(netprefix):
-                        out.append([ip,doctets])
+                        out.append([users.get(ip,'Неизвестный'),ip,doctets])
             except:
                 pass
     return sorted(out, key=lambda x: int(x[-1]), reverse=True)
