@@ -12,6 +12,7 @@ __copyright__ = "Copyright (c) 2014 Alexey Alexashin"
 __license__ = "Python"
 
 
+from datetime import date
 import sys, subprocess
 #import pdb
 
@@ -89,12 +90,32 @@ def getmonthsummary(month,year,netprefix,path="/opt/flow"):
     out.append(out[0]+out[1])
     return out
 
-def main():
+def main(month=date.today().month,year=date.today().year):
+    '''Monthly incoming report by clients'''
+
+    cost = 0.3
+    limit = 500.00
     netprefix='192.168.1.'
-    if len(sys.argv) == 2:
-        getusers()
-    else:
-        print "Usage: %s [options] <netflow directory>" % sys.argv[0]
+    report = getmonthreport(month,year,'in',netprefix,path="/opt/flow")
+    for line in report:
+        line[-1] = float(line[-1])/2**20  # Convert doctets to megabytes
+        if line[-1] > limit:
+            line.append(line[-1] - limit) # Add column 'Limit overflow'
+        else:
+            line.append(0.0)
+        if line[-1] > limit:
+            line.append(line[-1]*cost)
+        else:
+            line.append(0.0)
+    report.append(['Итого:',sum(row[2] for row in report)])
+    report.insert(0, ['Пользователь','IP-адрес',"Трафик,Мб","Превышение лимита,Мб","Стоимость,руб."])
+    report.insert(0, 'Отчет по входящему трафику за %d-%d' % (month, year))
+    return report
 
 if __name__ == "__main__":
-    main()
+    out = main()
+    print out[0]
+    print "%-s %-s %-s %-s %-s" %  tuple(out[1])
+    for line in out[2:-2]:
+        print "%-s %-s %-.2f %-.2f %-.2f" %  tuple(line)
+    print '%s %.2f' % tuple(out[-1])
