@@ -90,7 +90,7 @@ def getmonthsummary(month,year,netprefix,path="/opt/flow"):
     out.append(out[0]+out[1])
     return out
 
-def main(month=date.today().month,year=date.today().year):
+def main(month,year):
     '''Monthly incoming report by clients'''
 
     cost = 0.3
@@ -108,14 +108,37 @@ def main(month=date.today().month,year=date.today().year):
         else:
             line.append(0.0)
     report.append(['Итого:',sum(row[2] for row in report)])
-    report.insert(0, ['Пользователь','IP-адрес',"Трафик,Мб","Превышение лимита,Мб","Стоимость,руб."])
+    report.insert(0, ['Пользователь','IP-адрес',"Трафик,Мб","Превышение,Мб","Стоимость,руб."])
     report.insert(0, 'Отчет по входящему трафику за %d-%d' % (month, year))
     return report
 
-if __name__ == "__main__":
-    out = main()
-    print out[0]
-    print "%-s %-s %-s %-s %-s" %  tuple(out[1])
+def main_csv(month,year):
+    '''Monthly incoming report in csv'''
+    out = main(month,year)
+    csv = str(out[0]) + '\n'
+    csv += "{0};{1};{2};{3};{4}\n".format(*out[1])
     for line in out[2:-2]:
-        print "%-s %-s %-.2f %-.2f %-.2f" %  tuple(line)
-    print '%s %.2f' % tuple(out[-1])
+        csv += "{0};{1};{2};{3};{4}\n".format(*line) 
+    csv += '{0};{1}'.format(*out[-1])
+    return csv
+
+def main_stdout(month,year):
+    '''Monthly incoming report with alignment columns'''
+    out = main(month,year)
+    print out[0]
+    print str(out[1][0]).decode('utf-8').ljust(25), "{0:<20} {1:<18} {2:<27} {3:<15}".encode('utf-8').format(*out[1][1:])
+    for line in out[2:-2]:
+        print str(line[0]).decode('utf-8').ljust(25), "{0:<15} {1:<10.2f} {2:<15.2f} {3:<10.2f}".format(*line[1:]) 
+    print '{0:10} {1:5.2f}'.format(*out[-1])
+
+if __name__ == "__main__":
+    if len(sys.argv) == 3:
+        month=int(sys.argv[1])
+        year=int(sys.argv[2])
+    elif len(sys.argv) == 1:
+        month=date.today().month
+        year=date.today().year
+    else:
+        print "Usage: %s M YYYY\nIf no arguments returns report for current month" % sys.argv[0]
+        sys.exit(1)
+    main_stdout(month,year)
