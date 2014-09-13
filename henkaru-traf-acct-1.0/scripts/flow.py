@@ -71,7 +71,7 @@ def getmonthreport(month,year,mode,netprefix,path="/opt/flow"):
                 else:
                     (ip,flows,doctets,pkts) = line.split()
                     if ip.startswith(netprefix):
-                        out.append([users.get(ip,'Неизвестный'),ip,doctets])
+                        out.append([users.get(ip,'служебный'),ip,doctets])
             except:
                 pass
     return sorted(out, key=lambda x: int(x[-1]), reverse=True)
@@ -127,9 +127,11 @@ def main_stdout(month,year):
     out = main(month,year)
     print out[0]
     print str(out[1][0]).decode('utf-8').ljust(25), "{0:<20} {1:<18} {2:<27} {3:<15}".encode('utf-8').format(*out[1][1:])
+    print '_'*83
     for line in out[2:-2]:
         print str(line[0]).decode('utf-8').ljust(25), "{0:<15} {1:<10.2f} {2:<15.2f} {3:<10.2f}".format(*line[1:]) 
-    print '{0:10} {1:5.2f}'.format(*out[-1])
+    print '_'*83
+    print '{0:>37}          {1:5.2f}'.format(*out[-1])
 
 if __name__ == "__main__":
     if len(sys.argv) == 3:
