@@ -16,6 +16,12 @@ from datetime import date
 import sys, subprocess
 #import pdb
 
+monthdict = {1:"Январь", 2:"Февраль", 3:"Март",
+            4:"Апрель",5:"Май",6:"Июнь",
+            7:"Июль",8:"Август",9:"Сентябрь",
+            10:"Октябрь",11:"Ноябрь",12:"Декабрь"}
+
+
 def getusers():
     '''Get user and their IP addresses from mysql database.
     Returns dict{ip:user}'''
@@ -109,7 +115,7 @@ def main(month,year):
             line.append(0.0)
     report.append(['Итого:',sum(row[2] for row in report)])
     report.insert(0, ['Пользователь','IP-адрес',"Трафик,Мб","Превышение,Мб","Стоимость,руб."])
-    report.insert(0, 'Отчет по входящему трафику за %d-%d' % (month, year))
+    report.insert(0, 'Отчет по входящему трафику за %s-%d' % (monthdict[month], year))
     return report
 
 def main_csv(month,year):
