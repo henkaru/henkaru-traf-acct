@@ -109,13 +109,10 @@ def main(month,year):
             line.append(line[-1] - limit) # Add column 'Limit overflow'
         else:
             line.append(0.0)
-        if line[-1] > limit:
-            line.append(line[-1]*cost)
-        else:
-            line.append(0.0)
+        line.append(line[-1]*cost)
     report.append(['Итого:',sum(row[2] for row in report)])
     report.insert(0, ['Пользователь','IP-адрес',"Трафик,Мб","Превышение,Мб","Стоимость,руб."])
-    report.insert(0, 'Отчет по входящему трафику за %s-%d' % (monthdict[month], year))
+    report.insert(0, 'Отчет по входящему трафику за %s %d' % (monthdict[month], year))
     return report
 
 def main_csv(month,year):
