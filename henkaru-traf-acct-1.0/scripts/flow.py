@@ -129,10 +129,10 @@ def main_stdout(month,year):
     '''Monthly incoming report with alignment columns'''
     out = main(month,year)
     print out[0]
-    print str(out[1][0]).decode('utf-8').ljust(25), "{0:<20} {1:<18} {2:<27} {3:<15}".encode('utf-8').format(*out[1][1:])
+    print str(out[1][0]).decode('utf-8').ljust(25).encode('utf-8'), "{0:<20} {1:<18} {2:<27} {3:<15}".encode('utf-8').format(*out[1][1:])
     print '_'*83
     for line in out[2:-2]:
-        print str(line[0]).decode('utf-8').ljust(25), "{0:<15} {1:<10.2f} {2:<15.2f} {3:<10.2f}".format(*line[1:]) 
+        print str(line[0]).decode('utf-8').ljust(25).encode('utf-8'), "{0:<15} {1:<10.2f} {2:<15.2f} {3:<10.2f}".format(*line[1:]) 
     print '_'*83
     print '{0:>37}          {1:5.2f}'.format(*out[-1])
 
